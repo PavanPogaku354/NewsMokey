@@ -1,0 +1,12 @@
+
+<route  path="/entertainmnet" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/general" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/health" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/sports" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/science" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/technology" element ={ <News pageSize={5} category="general"/>}/>
+<route  path="/business" element ={ <News pageSize={5} category="general"/>}/>
+
+
+ <route  path="/" element ={ <News pageSize={5} category="general"/>}/>
+    
