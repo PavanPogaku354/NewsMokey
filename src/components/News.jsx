@@ -4,6 +4,7 @@ import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+
 export default class News extends Component {
 
  static defaultProps = {
@@ -34,14 +35,18 @@ category : "sports"
   updateNews = async()=>{
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=b85e586dd87d47948fef9cd36089b16f&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({loading : true})
+    this.props.setProgress(10);
     let data = await fetch(url);
+    this.props.setProgress(40);
     let parsedData = await data.json();
+    this.props.setProgress(70);
     console.log(parsedData);
     this.setState({
       articles:parsedData.articles,
       loading : false,
       totalResults:parsedData.totalResults
     })
+    this.props.setProgress(100);
   }
   async componentDidMount(){
     this.updateNews();
