@@ -33,7 +33,7 @@ category : "sports"
   
 
   updateNews = async()=>{
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=b85e586dd87d47948fef9cd36089b16f&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({loading : true})
     this.props.setProgress(10);
     let data = await fetch(url);
@@ -65,7 +65,7 @@ category : "sports"
    }
    fetchData= async ()=>{
     this.setState({page : this.state.page +1});
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=b85e586dd87d47948fef9cd36089b16f&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     
     let data = await fetch(url);
     let parsedData = await data.json();
