@@ -17,13 +17,14 @@ category : "sports"
   }
   
   
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       articles : [],
       loading : false,
       page :1
     }
+    document.title = `${this.props.category} -NewsMonkey`;
   }
   
 
