@@ -10,44 +10,56 @@ const News = (props) => {
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
-  // Setting document title based on category
+  // Set document title and fetch news on component mount
   useEffect(() => {
     document.title = `${props.category} - NewsMonkey`;
-    updateNews(); // Fetch initial news when component mounts
+    updateNews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array means it runs only once on mount
+  }, []);
 
+  // Fetch news articles from the API
   const updateNews = async () => {
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page}&pageSize=${props.pageSize}`;
+    console.log("Fetching URL:", url); // Debug the URL
     setLoading(true);
     props.setProgress(10);
-    const data = await fetch(url);
-    props.setProgress(40);
-    const parsedData = await data.json();
-    props.setProgress(70);
-    setArticles(parsedData.articles);
-    setTotalResults(parsedData.totalResults);
-    setLoading(false);
-    props.setProgress(100);
+    try {
+      const data = await fetch(url);
+      props.setProgress(40);
+      const parsedData = await data.json();
+      console.log("Parsed Data:", parsedData); // Debug the parsed data
+      props.setProgress(70);
+      setArticles(parsedData.articles);
+      setTotalResults(parsedData.totalResults);
+    } catch (error) {
+      console.error("Error fetching news: ", error); // Log any errors
+    } finally {
+      setLoading(false);
+      props.setProgress(100);
+    }
   };
 
+  // Fetch more news articles for infinite scroll
   const fetchData = async () => {
     const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page + 1}&pageSize=${props.pageSize}`;
     setPage(page + 1);
-    const data = await fetch(url);
-    const parsedData = await data.json();
-    setArticles(articles.concat(parsedData.articles));
-    setTotalResults(parsedData.totalResults);
+    try {
+      const data = await fetch(url);
+      const parsedData = await data.json();
+      setArticles(articles.concat(parsedData.articles));
+      setTotalResults(parsedData.totalResults);
+    } catch (error) {
+      console.error("Error fetching more news: ", error);
+    }
   };
 
   return (
     <>
       {loading && <Spinner />}
-
       <InfiniteScroll
-        dataLength={articles.length} // Important field to render the next data
+        dataLength={articles.length}
         next={fetchData}
-        hasMore={articles.length !== totalResults}
+        hasMore={articles.length < totalResults}
         loader={<Spinner />}
         endMessage={
           <p style={{ textAlign: 'center' }}>
@@ -77,12 +89,14 @@ const News = (props) => {
   );
 };
 
+// Default props for the News component
 News.defaultProps = {
   country: 'us',
-  pageSize: '8',
-  category: 'sports',
+  pageSize: 8,
+  category: 'general',
 };
 
+// Prop types for the News component
 News.propTypes = {
   country: PropTypes.string,
   pageSize: PropTypes.number,
